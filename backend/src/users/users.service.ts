@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Item } from './entities/item.entity';
-import { CreateItemDto } from './dto/create-item.dto';
-import { UpdateItemDto } from './dto/update-item.dto';
+import { User } from './entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
-export class ItemsService {
+export class UsersService {
   constructor(
-    @InjectRepository(Item)
-    private readonly repo: Repository<Item>,
+    @InjectRepository(User)
+    private readonly repo: Repository<User>,
   ) {}
 
-  create(dto: CreateItemDto) {
-    const item = this.repo.create(dto);
-    return this.repo.save(item);
+  create(dto: CreateUserDto) {
+    const user = this.repo.create(dto);
+    return this.repo.save(user);
   }
 
   findAll() {
@@ -25,7 +25,7 @@ export class ItemsService {
     return this.repo.findOne({ where: { id } });
   }
 
-  update(id: string, dto: UpdateItemDto) {
+  update(id: string, dto: UpdateUserDto) {
     return this.repo.update(id, dto);
   }
 
