@@ -1,6 +1,21 @@
 version: '3.8'
 
 services:
+  postgres:
+    image: postgres:17
+    container_name: postgres17_integration_studio
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: supersecret
+      POSTGRES_USER: postgres
+      POSTGRES_DB: lanchonete
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - integration_network
+
   backend:
     build: ./backend
     container_name: nest-backend
@@ -9,6 +24,10 @@ services:
     env_file:
       - ./backend/.env
     restart: unless-stopped
+    depends_on:
+      - postgres
+    networks:
+      - integration_network
 
   frontend:
     build: ./frontend
@@ -18,3 +37,11 @@ services:
     env_file:
       - ./frontend/.env.local
     restart: unless-stopped
+    networks:
+      - integration_network
+
+volumes:
+  postgres_data:
+
+networks:
+  integration_network:

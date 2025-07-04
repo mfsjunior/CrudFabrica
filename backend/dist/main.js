@@ -1,20 +1,23 @@
-"use strict"; // Ativa o modo estrito do JavaScript para evitar erros comuns.
-// Define a propriedade __esModule para compatibilidade com módulos ES6.
+"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// Importa o módulo principal do NestJS, que fornece funções essenciais para criar a aplicação.
+// Importa o polyfill de metadata necessário para o funcionamento de decorators no NestJS.
+// É importante para recursos avançados como validação, injeção de dependências e integração com ORMs.
+require("reflect-metadata");
+// Importa a função NestFactory, que é usada para criar a instância principal da aplicação NestJS.
 const core_1 = require("@nestjs/core");
-// Importa o módulo raiz da aplicação, onde todos os outros módulos estão conectados.
+// Importa o módulo principal da aplicação, onde todos os outros módulos são conectados.
 const app_module_1 = require("./app.module");
 // Função assíncrona que inicializa e executa a aplicação NestJS.
 async function bootstrap() {
     // Cria a aplicação NestJS a partir do módulo principal (AppModule).
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
-    // Habilita o CORS (Cross-Origin Resource Sharing), permitindo que o frontend acesse a API.
+    // Habilita o CORS (Cross-Origin Resource Sharing), permitindo que o frontend (em outro domínio/porta)
+    // faça requisições para a API. Essencial para projetos onde frontend e backend estão separados.
     app.enableCors();
-    // Faz o servidor escutar na porta 3000.
+    // Faz o servidor HTTP escutar na porta 3000 dentro do container Docker.
+    // Essa porta deve ser mapeada no docker-compose.yml para acesso externo.
     await app.listen(3000);
 }
 // Executa a função bootstrap para iniciar a aplicação.
+// Sem essa chamada, o servidor não inicia.
 bootstrap();
-//# sourceMappingURL=main.js.map
-// Comentário gerado pelo TypeScript para mapear o código-fonte original (main.ts) ao arquivo transpilado (main.js).
